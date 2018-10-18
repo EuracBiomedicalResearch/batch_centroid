@@ -40,7 +40,7 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
     if (!dir.exists(outd))
         dir.create(outd, recursive = TRUE)
     tmp <- combineSpectraMovingWindow(
-        readMSData(z, mode = "inMem", msLevel = 1)
+        readMSData(z, mode = "inMem", msLevel = 1), timeDomain = TRUE
     )
     suppressWarnings(
         tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
