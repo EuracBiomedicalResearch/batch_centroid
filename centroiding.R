@@ -21,6 +21,7 @@ ncores <- as.integer(Sys.getenv("SLURM_JOB_CPUS_PER_NODE", 4))
 
 ## Script starts here.
 library(MSnbase)
+library(BiocParallel)
 library(BatchJobs)
 register(bpstart(MulticoreParam(ncores, log = TRUE, logdir = log_dir)))
 
