@@ -26,6 +26,11 @@ docker run -it --rm -e WINEDEBUG=-all \
 The [convert_to_mzML.sh](convert_to_mzML.sh) script uses this dockerized
 msconvert to convert all wiff files in a specified folder to mzML.
 
+To run the script on the cluster using `slurm`:
+
+```
+sbatch --mem-per-cpu=8000 -w calc04 -c 1 ./convert_to_mzML.sh
+```
 
 # Perform R-based centroiding
 
