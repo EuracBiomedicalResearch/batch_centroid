@@ -3,12 +3,12 @@
 
 ## Directory where the profile mzML files can be found (can contain sub-folders
 ## etc.
-in_dir <- "~/data/test_data/"
+in_dir <- "/data/massspec/wiff/"
 
 ## Pattern in the full file path from the original input files that should be
 ## replaced with "path_replace".
-path_pattern <- "/data/"
-path_replace <- "/tmp/"
+path_pattern <- "/wiff/"
+path_replace <- "/mzML/"
 
 ## Log directory. Timings and output from the individual processes will be
 ## stored there.

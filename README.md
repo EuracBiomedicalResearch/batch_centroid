@@ -23,8 +23,15 @@ docker run -it --rm -e WINEDEBUG=-all \
 	wine msconvert /data/file.raw
 ```
 
+## Converting wiff to (profile) mzML files
+
 The [convert_to_mzML.sh](convert_to_mzML.sh) script uses this dockerized
-msconvert to convert all wiff files in a specified folder to mzML.
+msconvert to convert all wiff files in a specified folder to mzML. Configure the
+variables within the script to point to the folder containing all wiff files,
+and optionally to the folder containing the **centroided** mzML files (the
+latter is useful if a large batch of files was already centroided and
+centroiding should then only be performed on the new files). Converted
+profile-mode mzML files are stored in the same folder the wiff files reside.
 
 To run the script on the cluster using `slurm`:
 
@@ -43,6 +50,10 @@ files using `MSnbase`.
   the `in_dir`, `path_pattern`, `path_replace`.
 - Eventually edit also the [centroiding.sh](centroiding.sh) shell script e.g. if
   the R version changed.
+- Until fixed (`mzR` using a more recent proteowizard version) we might have to
+  replace MS CV term `1003019` to BPC (`1000628`), e.g. using 
+  `sed -i '' "s/MS:1003019/MS:1000628/" 20191009_EQ_MIX_POS_15.mzML` (note that
+  the `-i ''` might only be required in macOS...).
 - Start the job on the queuing system:
   `sbatch --mem-per-cpu=8000 -w mccalc07 -c 12 ./centroiding.sh`
   
@@ -55,3 +66,12 @@ centroided.
 - Eventually change/edit the `chech_files.sh` script.
 - Run the job, similar to the one described in the previous section.
 
+# Conversion workflow on the IFB calculation servers
+
+- Ensure wiff files are properly copied into */data/massspec/wiff*.
+- Run the `convert_to_mzML.sh` script ensuring `SOURCE="/data/massspec/wiff"`
+  and `DEST="/data/massspec/mzML"`. This will only convert wiff files to
+  profile-mode mzML files if no centroided mzML file with the same name does
+  already exist in */data/massspec/mzML*.
+- Run the `centroiding.sh` script to centroid the profile-mode mzML files.
+  
