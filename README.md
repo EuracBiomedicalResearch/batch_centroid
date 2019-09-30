@@ -53,7 +53,9 @@ files using `MSnbase`.
 - Until fixed (`mzR` using a more recent proteowizard version) we might have to
   replace MS CV term `1003019` to BPC (`1000628`), e.g. using 
   `sed -i '' "s/MS:1003019/MS:1000628/" 20191009_EQ_MIX_POS_15.mzML` (note that
-  the `-i ''` might only be required in macOS...).
+  the `-i ''` might only be required in macOS...). To run this on all *.mzML*
+  files in a folder: 
+  `find . -type f -name "*.mzML" -exec sed -i "s/MS:1003019/MS:1000628/" {} \;`
 - Start the job on the queuing system:
   `sbatch --mem-per-cpu=8000 -w mccalc07 -c 12 ./centroiding.sh`
   
