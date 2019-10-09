@@ -40,15 +40,20 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
     outd <- dirname(outf)
     if (!dir.exists(outd))
         dir.create(outd, recursive = TRUE)
-    tmp <- combineSpectraMovingWindow(
-        readMSData(z, mode = "inMem", msLevel = 1), timeDomain = TRUE
-    )
-    suppressWarnings(
-        tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
-                                halfWindowSize = 6L),
-                         refineMz = "descendPeak", signalPercentage = 33)
-    )
-    writeMSData(tmp, file = outf, copy = TRUE)
+    tmp <- readMSData(z, mode = "onDisk")
+    if (any(msLevel(tmp) == 1L)) {
+        tmp <- combineSpectraMovingWindow(
+            readMSData(z, mode = "inMem", msLevel = 1), timeDomain = TRUE
+        )
+        suppressWarnings(
+            tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
+                                    halfWindowSize = 6L),
+                             refineMz = "descendPeak", signalPercentage = 33)
+        )
+        writeMSData(tmp, file = outf, copy = TRUE)
+    } else {
+        message("File ", basename(z), " does not contain any MS1 spectra.")
+    }
 }
 
 bplapply(fls_in, centroid_one_file, pattern = path_pattern,
