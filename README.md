@@ -26,7 +26,7 @@ docker run -it --rm -e WINEDEBUG=-all \
 ## Converting wiff to (profile) mzML files
 
 The [convert_to_mzML.sh](convert_to_mzML.sh) script uses this dockerized
-msconvert to convert all wiff files in a specified folder to mzML. Configure the
+msconvert to convert all wiff files in a specified folder to mzML.Configure the
 variables within the script to point to the folder containing all wiff files,
 and optionally to the folder containing the **centroided** mzML files (the
 latter is useful if a large batch of files was already centroided and
@@ -50,12 +50,6 @@ files using `MSnbase`.
   the `in_dir`, `path_pattern`, `path_replace`.
 - Eventually edit also the [centroiding.sh](centroiding.sh) shell script e.g. if
   the R version changed.
-- Until fixed (`mzR` using a more recent proteowizard version) we might have to
-  replace MS CV term `1003019` to BPC (`1000628`), e.g. using 
-  `sed -i '' "s/MS:1003019/MS:1000628/" 20191009_EQ_MIX_POS_15.mzML` (note that
-  the `-i ''` might only be required in macOS...). To run this on all *.mzML*
-  files in a folder: 
-  `find . -type f -name "*.mzML" -exec sed -i "s/MS:1003019/MS:1000628/" {} \;`
 - Start the job on the queuing system:
   `sbatch --mem-per-cpu=8000 -w mccalc07 -c 12 ./centroiding.sh`
   
@@ -77,3 +71,9 @@ centroided.
   already exist in */data/massspec/mzML*.
 - Run the `centroiding.sh` script to centroid the profile-mode mzML files.
   
+
+# Perform centroiding using proteowizard's `msconvert`
+
+For very fast checks (e.g. for system suitability tests) it might be OK to use
+proteowizard's centroiding.
+

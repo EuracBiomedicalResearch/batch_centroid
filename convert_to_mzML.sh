@@ -1,5 +1,5 @@
 #!/bin/bash
-SOURCE="/data/massspec/wiff"
+SOURCE="/data/massspec/bbbznas01/wiff"
 DEST="/data/massspec/mzML"
 #DEST="$SOURCE"
 
@@ -22,7 +22,8 @@ find $SOURCE -type f -name "*.wiff"|while read fl; do
 	docker run --rm -e WINEDEBUG=-all \
 	       -v "$SOURCE:$SOURCE" \
 	       chambm/pwiz-skyline-i-agree-to-the-vendor-licenses \
-	       wine msconvert "$fl" -z -o "$dr" --outfile "$res_fl"
+	       wine msconvert "$fl" -z -o "$dr" --outfile "$res_fl" \
+	       --chromatogramFilter "index [0,1]"
     fi
 done
 
