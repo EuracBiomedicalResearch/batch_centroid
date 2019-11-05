@@ -52,7 +52,10 @@ files using `MSnbase`.
   the R version changed.
 - Start the job on the queuing system:
   `sbatch --mem-per-cpu=8000 -w mccalc07 -c 12 ./centroiding.sh`
-  
+- After centroiding eventually remove all profile-mode mzML files: change into
+  the directory where the wiff files are stored and call:
+  `find . -type f -name "*.mzML" -delete`.
+
 ## Check if files are centroided
 
 We are simply checking if a) we can read the mzML file and b) if it is indeed
