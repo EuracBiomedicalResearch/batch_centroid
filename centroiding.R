@@ -42,14 +42,28 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
         dir.create(outd, recursive = TRUE)
     tmp <- readMSData(z, mode = "onDisk")
     if (any(msLevel(tmp) == 1L)) {
-        tmp <- combineSpectraMovingWindow(
-            readMSData(z, mode = "inMem", msLevel = 1), timeDomain = TRUE
-        )
-        suppressWarnings(
-            tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
-                                    halfWindowSize = 6L),
-                             refineMz = "descendPeak", signalPercentage = 33)
-        )
+        if (any(msLevel(tmp) > 1)) {
+            tmp <- readMSData(fl, mode = "onDisk")
+            ## Do smoothing and centroiding only on MS level 1, report
+            ## profile-mode MS2 data.
+            suppressWarnings(
+                tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
+                                        halfWindowSize = 6L, msLevel. = 1L),
+                                 refineMz = "descendPeak",
+                                 signalPercentage = 33,
+                                 msLevel. = 1L)
+            )
+        } else {
+            tmp <- combineSpectraMovingWindow(
+                readMSData(z, mode = "inMem", msLevel = 1), timeDomain = TRUE
+            )
+            suppressWarnings(
+                tmp <- pickPeaks(
+                    smooth(tmp, method = "SavitzkyGolay",
+                           halfWindowSize = 6L),
+                    refineMz = "descendPeak", signalPercentage = 33)
+            )
+        }
         writeMSData(tmp, file = outf, copy = TRUE)
     } else {
         message("File ", basename(z), " does not contain any MS1 spectra.")
