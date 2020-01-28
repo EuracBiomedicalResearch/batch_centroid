@@ -52,6 +52,7 @@ files using `MSnbase`.
   the R version changed.
 - Start the job on the queuing system:
   `sbatch --mem-per-cpu=8000 -w mccalc07 -c 12 ./centroiding.sh`
+- Eventually use `-p slow` to run the job immediately if the cluster is full.
 - After centroiding eventually remove all profile-mode mzML files: change into
   the directory where the wiff files are stored and call:
   `find . -type f -name "*.mzML" -delete`.
@@ -80,3 +81,7 @@ centroided.
 For very fast checks (e.g. for system suitability tests) it might be OK to use
 proteowizard's centroiding.
 
+# Tipps and tricks
+
+For our cluster it might be helpful to put jobs in e.g. the *slow* queue, as
+this will cause other jobs to be paused to automatically run mine.

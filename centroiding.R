@@ -3,7 +3,9 @@
 
 ## Directory where the profile mzML files can be found (can contain sub-folders
 ## etc.
-in_dir <- "/data/massspec/bbbznas01/wiff/"
+## in_dir <- "/data/massspec/bbbznas01/wiff/"
+in_dir <- "/Users/jo/data/bbbznas01/wiff/"
+
 
 ## Pattern in the full file path from the original input files that should be
 ## replaced with "path_replace".
@@ -12,12 +14,12 @@ path_replace <- "/mzML/"
 
 ## Log directory. Timings and output from the individual processes will be
 ## stored there.
-log_dir <- "~/log/centroiding/"
+log_dir <- "/Users/jo/log/centroiding/"
 
 ## Number of CPUs to use in parallel. Takes by default the number of nodes
 ## specified for the slurm job.
 ncores <- as.integer(Sys.getenv("SLURM_JOB_CPUS_PER_NODE", 4))
-
+## ncores <- 4
 
 ## Script starts here.
 library(MSnbase)
@@ -43,7 +45,7 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
     tmp <- readMSData(z, mode = "onDisk")
     if (any(msLevel(tmp) == 1L)) {
         if (any(msLevel(tmp) > 1)) {
-            tmp <- readMSData(fl, mode = "onDisk")
+            tmp <- readMSData(z, mode = "onDisk")
             ## Do smoothing and centroiding only on MS level 1, report
             ## profile-mode MS2 data.
             suppressWarnings(

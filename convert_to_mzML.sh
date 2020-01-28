@@ -1,6 +1,8 @@
 #!/bin/bash
-SOURCE="/data/massspec/bbbznas01/wiff"
-DEST="/data/massspec/mzML"
+# SOURCE="/data/massspec/bbbznas01/wiff"
+# DEST="/data/massspec/mzML"
+SOURCE="/Users/jo/data/bbbznas01/wiff/"
+DEST="/Users/jo/data/mzML/"
 #DEST="$SOURCE"
 
 ## Note: $DEST can point to a folder where already converted and centroided
