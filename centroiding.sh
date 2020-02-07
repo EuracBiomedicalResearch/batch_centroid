@@ -3,6 +3,6 @@
 # scrpt="~/Projects/git/EuracBiomedicalResearch/batch_centroid/centroiding.R"
 #  $R --vanilla --file=$scrpt
 
- R=R
+R=R
 scrpt="/Users/jo/Projects/git/EuracBiomedicalResearch/batch_centroid/centroiding.R"
- $R --file=$scrpt
+$R --file=$scrpt

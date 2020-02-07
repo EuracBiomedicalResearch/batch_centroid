@@ -3,8 +3,8 @@
 
 ## Directory where the profile mzML files can be found (can contain sub-folders
 ## etc.
-## in_dir <- "/data/massspec/bbbznas01/wiff/"
-in_dir <- "/Users/jo/data/bbbznas01/wiff/"
+in_dir <- "/data/massspec/bbbznas01/wiff/"
+## in_dir <- "/Users/jo/data/bbbznas01/wiff/"
 
 
 ## Pattern in the full file path from the original input files that should be
@@ -14,7 +14,7 @@ path_replace <- "/mzML/"
 
 ## Log directory. Timings and output from the individual processes will be
 ## stored there.
-log_dir <- "/Users/jo/log/centroiding/"
+## log_dir <- "/Users/jo/log/centroiding/"
 
 ## Number of CPUs to use in parallel. Takes by default the number of nodes
 ## specified for the slurm job.
@@ -25,10 +25,10 @@ ncores <- as.integer(Sys.getenv("SLURM_JOB_CPUS_PER_NODE", 4))
 library(MSnbase)
 library(BiocParallel)
 library(BatchJobs)
-register(bpstart(MulticoreParam(ncores, log = TRUE, logdir = log_dir)))
+register(bpstart(MulticoreParam(ncores)))
 
-if (!dir.exists(log_dir))
-    dir.create(log_dir)
+## if (!dir.exists(log_dir))
+##     dir.create(log_dir)
 
 fls_in <- dir(in_dir, pattern = "mzML", full.names = TRUE, recursive = TRUE)
 fls_out <- sub(pattern = path_pattern, replacement = path_replace, fls_in)
@@ -54,6 +54,14 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
                                  refineMz = "descendPeak",
                                  signalPercentage = 33,
                                  msLevel. = 1L)
+            )
+            suppressWarnings(
+                tmp <- pickPeaks(tmp,
+                                 halfWindowSize = 4L,
+                                 SNR = 1L,
+                                 refineMz = "descendPeak",
+                                 signalPercentage = 50,
+                                 msLevel. = 2L)
             )
         } else {
             tmp <- combineSpectraMovingWindow(
