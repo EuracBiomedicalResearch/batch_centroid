@@ -84,4 +84,5 @@ proteowizard's centroiding.
 # Tipps and tricks
 
 For our cluster it might be helpful to put jobs in e.g. the *slow* queue, as
-this will cause other jobs to be paused to automatically run mine.
+this will cause other jobs to be paused to automatically run mine (i.e. add `-p
+slow` as a parameter.
