@@ -14,7 +14,7 @@ fls <- dir(mzML_dir, pattern = "mzML$", full.names = TRUE, recursive = TRUE)
 timestamp_for_file <- function(x) {
     fname <- basename(x)
     res <- extract_time_stamp(x, BPPARAM = SerialParam())
-    cat(paste0(fname, "\t", as.character(res)),
+    cat(format(res, "%Y-%m-%d %H:%M:%S"),
         file = paste0(out_dir, fname, ".tstmp"))
 }
 
