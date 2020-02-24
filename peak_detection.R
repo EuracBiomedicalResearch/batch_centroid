@@ -3,7 +3,6 @@ out_dir <- "/data/massspec/RData"
 dir.create(out_dir, showWarnings = FALSE)
 
 ncores <- Sys.getenv("SLURM_JOB_CPUS_PER_NODE", 3)
-register(bpstart(MulticoreParam(ncores)))
 
 library(xcms)
 cwp <- CentWaveParam(
@@ -19,6 +18,7 @@ mnp <- MergeNeighboringPeaksParam(
   expandMz = 0.001, 
   ppm = 10,
   minProp = 0.66)
+register(bpstart(MulticoreParam(ncores)))
 
 fls <- read.table(
   "/home/mgarciaaloy/CHRIS/chris-files.txt",
