@@ -21,7 +21,7 @@ mnp <- MergeNeighboringPeaksParam(
   minProp = 0.66)
 
 fls <- read.table(
-  "~/CHRIS/chris-files.txt",
+  "/home/mgarciaaloy/CHRIS/chris-files.txt",
   sep = "\t", header = TRUE, as.is = TRUE)
 fls <- fls$mzML_file
 
