@@ -10,7 +10,7 @@ cwp <- CentWaveParam(
   ppm = 50, 
   snthresh = ,
   mzdiff = 0.001,
-  prefilter = c(3, 100),
+  prefilter = c(3, 500),
   noise = 100,
   integrate = 2)
 mnp <- MergeNeighboringPeaksParam(
@@ -24,6 +24,7 @@ fls <- read.table(
   "/home/mgarciaaloy/CHRIS/chris-files.txt",
   sep = "\t", header = TRUE, as.is = TRUE)
 fls <- fls$mzML_file
+fls <- fls[grep("20170331", fls)]
 
 peak_detection_for_file <- function(x){
   require("xcms")
