@@ -24,7 +24,7 @@ fls <- read.table(
   "/home/mgarciaaloy/CHRIS/chris-files.txt",
   sep = "\t", header = TRUE, as.is = TRUE)
 fls <- fls$mzML_file
-fls <- fls[grep("20170330", fls)]
+fls <- fls[grep("20170504", fls)]
 
 peak_detection_for_file <- function(x){
   require("xcms")
