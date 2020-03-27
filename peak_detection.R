@@ -8,7 +8,7 @@ library(xcms)
 cwp <- CentWaveParam(
   peakwidth = c(2, 20), 
   ppm = 50, 
-  snthresh = ,
+  snthresh = 5,
   mzdiff = 0.001,
   prefilter = c(3, 500),
   noise = 100,
@@ -24,7 +24,6 @@ fls <- read.table(
   "/home/mgarciaaloy/CHRIS/chris-files.txt",
   sep = "\t", header = TRUE, as.is = TRUE)
 fls <- fls$mzML_file
-#fls <- fls[grep("20170330", fls)]
 
 peak_detection_for_file <- function(x){
   require("xcms")
