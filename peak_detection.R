@@ -21,7 +21,7 @@ mnp <- MergeNeighboringPeaksParam(
 register(bpstart(MulticoreParam(ncores)))
 
 fls <- read.table(
-  "/home/mgarciaaloy/CHRIS/chris-files.txt",
+  "/home/mgarciaaloy/CHRIS/data/chris-files.txt",
   sep = "\t", header = TRUE, as.is = TRUE)
 fls <- fls$mzML_file
 
