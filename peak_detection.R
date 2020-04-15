@@ -4,6 +4,7 @@ dir.create(out_dir, showWarnings = FALSE)
 
 ncores <- Sys.getenv("SLURM_JOB_CPUS_PER_NODE", 3)
 
+library(readxl)
 library(xcms)
 cwp <- CentWaveParam(
   peakwidth = c(2, 20), 
@@ -20,9 +21,9 @@ mnp <- MergeNeighboringPeaksParam(
   minProp = 0.66)
 register(bpstart(MulticoreParam(ncores)))
 
-fls <- read.table(
-  "/home/mgarciaaloy/CHRIS/data/chris-files.txt",
-  sep = "\t", header = TRUE, as.is = TRUE)
+fls <- read_xlsx(
+  "/home/mgarciaaloy/CHRIS/data/chris-files-annotated.xlsx")
+fls <- fls[grep("20170320", fls$mzML_file), ]
 fls <- fls$mzML_file
 
 peak_detection_for_file <- function(x){
