@@ -29,7 +29,7 @@ fls <- fls$mzML_file
 peak_detection_for_file <- function(x){
   require("xcms")
   fname <- x
-  raw_data <- readMSData(files = paste0(mzML_dir, fname), 
+  raw_data <- readMSData(files = paste0(mzML_dir, "/", fname), 
                          mode = "onDisk")
   xdata <- findChromPeaks(raw_data, param = cwp)
   xdata <- refineChromPeaks(xdata, param = mnp)
