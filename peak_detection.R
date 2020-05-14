@@ -33,7 +33,7 @@ peak_detection_for_file <- function(x){
                          mode = "onDisk")
   xdata <- findChromPeaks(raw_data, param = cwp)
   xdata <- refineChromPeaks(xdata, param = mnp)
-  tmp <- paste0(out_dir, gsub(".mzML$", ".RData", fname))
+  tmp <- paste0(out_dir, "/", gsub(".mzML$", ".RData", fname))
   dir.create(dirname(tmp), recursive = TRUE, showWarnings = FALSE)
   save(xdata, file = tmp)
 }
