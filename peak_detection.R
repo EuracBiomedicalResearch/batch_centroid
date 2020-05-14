@@ -1,5 +1,5 @@
 mzML_dir <- "/data/massspec/mzML"  
-out_dir <- "/data/massspec/RData" 
+out_dir <- "/data/massspec/RData2"
 dir.create(out_dir, showWarnings = FALSE)
 
 ncores <- Sys.getenv("SLURM_JOB_CPUS_PER_NODE", 3)
@@ -22,8 +22,7 @@ mnp <- MergeNeighboringPeaksParam(
 register(bpstart(MulticoreParam(ncores)))
 
 fls <- read_xlsx(
-  "/home/mgarciaaloy/CHRIS/data/chris-files-annotated.xlsx")
-fls <- fls[grep("20170320", fls$mzML_file), ]
+  "/home/jrainer/Projects/git/EuracBiomedicalResearch/metabo_chris_untargeted/data/chris-files-annotated.xlsx")
 fls <- fls$mzML_file
 
 peak_detection_for_file <- function(x){
