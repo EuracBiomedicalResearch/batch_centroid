@@ -21,9 +21,9 @@ find $SOURCE -type f -name "*.wiff"|while read fl; do
 	echo "file $res_fl_dest exists, skipping"
     else
 	dr=`dirname "$fl"`
-	singularity run --bind "$SOURCE:$SOURCE" \
+	singularity run -S /mywineprefix --bind "$SOURCE:$SOURCE" \
 		    /home/jrainer/singularity/pwiz-skyline-i-agree-to-the-vendor-licenses_latest.sif \
-		    wine msconvert "$fl" -z -o "$dr" --outfile "$res_fl" \
+		    mywine msconvert "$fl" -z -o "$dr" --outfile "$res_fl" \
 		    --chromatogramFilter "index[0,1]"
     fi
 done
