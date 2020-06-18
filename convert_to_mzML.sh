@@ -1,8 +1,8 @@
 #!/bin/bash
-# SOURCE="/data/massspec/bbbznas01/wiff"
-# DEST="/data/massspec/mzML"
-SOURCE="/Users/jo/data/bbbznas01/wiff/"
-DEST="/Users/jo/data/mzML/"
+SOURCE="/data/massspec/bbbznas01/wiff"
+DEST="/data/massspec/mzML"
+# SOURCE="/Users/jo/data/bbbznas01/wiff/"
+# DEST="/Users/jo/data/mzML/"
 #DEST="$SOURCE"
 
 ## Note: $DEST can point to a folder where already converted and centroided
@@ -21,12 +21,17 @@ find $SOURCE -type f -name "*.wiff"|while read fl; do
 	echo "file $res_fl_dest exists, skipping"
     else
 	dr=`dirname "$fl"`
-	docker run --rm -e WINEDEBUG=-all \
-	       -v "$SOURCE:$SOURCE" \
-	       chambm/pwiz-skyline-i-agree-to-the-vendor-licenses \
-	       wine msconvert "$fl" -z -o "$dr" --outfile "$res_fl" \
-	       --chromatogramFilter "index [0,1]"
+	singularity run --bind "$SOURCE:$SOURCE" \
+		    /home/jrainer/singularity/pwiz-skyline-i-agree-to-the-vendor-licenses_latest.sif \
+		    wine msconvert "$fl" -z -o "$dr" --outfile "$res_fl" \
+		    --chromatogramFilter "index[0,1]"
     fi
 done
 
 echo "-=== All done ===-"
+
+	# docker run --rm -e WINEDEBUG=-all \
+	#        -v "$SOURCE:$SOURCE" \
+	#        chambm/pwiz-skyline-i-agree-to-the-vendor-licenses \
+	#        wine msconvert "$fl" -z -o "$dr" --outfile "$res_fl" \
+	#        --chromatogramFilter "index [0,1]"

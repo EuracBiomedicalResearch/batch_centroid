@@ -23,6 +23,22 @@ docker run -it --rm -e WINEDEBUG=-all \
 	wine msconvert /data/file.raw
 ```
 
+### Use of singularity instead of docker on the clusters
+
+For security reasons, singularity might be the better choice on a calculation
+cluster.
+
+- Create the singularity image from the docker image: `singularity pull
+  docker://chambm/pwiz-skyline-i-agree-to-the-vendor-licenses`.
+- To run the container:
+
+```
+singularity run --bind /your/data:/data \
+pwiz-skyline-i-agree-to-the-vendor-licenses_latest.sif 
+wine msconvert /data/file.raw
+```
+
+
 ## Converting wiff to (profile) mzML files
 
 The [convert_to_mzML.sh](convert_to_mzML.sh) script uses this dockerized
