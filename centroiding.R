@@ -86,5 +86,16 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
     }
 }
 
-bplapply(fls_in, centroid_one_file, pattern = path_pattern,
+try_centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
+    res <- try(centroid_one_file(z = z, pattern = pattern,
+                                 replacement = replacement,
+                                 fixed = fixed))
+    if (is(res, "try-error")) {
+        message("ERROR: unable to process file ", basename(z), "!\n The Error ",
+                "was: ", as.character(res))
+    }
+    TRUE
+}
+
+bplapply(fls_in, try_centroid_one_file, pattern = path_pattern,
          replacement = path_replace)
