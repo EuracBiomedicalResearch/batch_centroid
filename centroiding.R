@@ -45,12 +45,11 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
     tmp <- readMSData(z, mode = "onDisk")
     if (any(msLevel(tmp) == 1L)) {
         if (any(msLevel(tmp) > 1)) {
-            tmp <- readMSData(z, mode = "onDisk")
             ## Do smoothing and centroiding only on MS level 1, report
             ## profile-mode MS2 data.
             suppressWarnings(
                 tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
-                                        halfWindowSize = 4L, msLevel. = 1L),
+                                        halfWindowSize = 6L, msLevel. = 1L),
                                  refineMz = "descendPeak",
                                  signalPercentage = 33,
                                  msLevel. = 1L)
@@ -64,9 +63,16 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
                                  msLevel. = 2L)
             )
         } else {
-            tmp <- combineSpectraMovingWindow(
-                readMSData(z, mode = "inMem", msLevel = 1), timeDomain = TRUE
-            )
+            ## Skip spectra with only few peak in it. These will fail in the
+            ## smoothing and centroiding.
+            nspec <- length(tmp)
+            tmp <- tmp[peaksCount(tmp) > 1000]
+            nspec_2 <- length(tmp)
+            if (nspec_2 < nspec) {
+                message("WARN: removed ", nspec - nspec_2, " spectra in file ",
+                        basename(z), "!")
+            }
+            tmp <- combineSpectraMovingWindow(tmp, timeDomain = TRUE)
             suppressWarnings(
                 tmp <- pickPeaks(
                     smooth(tmp, method = "SavitzkyGolay",
