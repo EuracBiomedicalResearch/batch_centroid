@@ -50,7 +50,7 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
             ## profile-mode MS2 data.
             suppressWarnings(
                 tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
-                                        halfWindowSize = 6L, msLevel. = 1L),
+                                        halfWindowSize = 4L, msLevel. = 1L),
                                  refineMz = "descendPeak",
                                  signalPercentage = 33,
                                  msLevel. = 1L)
