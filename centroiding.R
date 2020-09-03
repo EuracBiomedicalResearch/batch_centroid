@@ -87,9 +87,55 @@ centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
 }
 
 try_centroid_one_file <- function(z, pattern, replacement, fixed = TRUE) {
-    res <- try(centroid_one_file(z = z, pattern = pattern,
-                                 replacement = replacement,
-                                 fixed = fixed))
+    res <- try({
+        outf <- sub(pattern = pattern, replacement = replacement, z,
+                    fixed = fixed)
+        outd <- dirname(outf)
+        if (!dir.exists(outd))
+            dir.create(outd, recursive = TRUE)
+        tmp <- readMSData(z, mode = "onDisk")
+        if (any(msLevel(tmp) == 1L)) {
+            if (any(msLevel(tmp) > 1)) {
+                ## Do smoothing and centroiding only on MS level 1, report
+                ## profile-mode MS2 data.
+                suppressWarnings(
+                    tmp <- pickPeaks(smooth(tmp, method = "SavitzkyGolay",
+                                            halfWindowSize = 6L, msLevel. = 1L),
+                                     refineMz = "descendPeak",
+                                     signalPercentage = 33,
+                                     msLevel. = 1L)
+                )
+                suppressWarnings(
+                    tmp <- pickPeaks(tmp,
+                                     halfWindowSize = 4L,
+                                     SNR = 1L,
+                                     refineMz = "descendPeak",
+                                     signalPercentage = 50,
+                                     msLevel. = 2L)
+                )
+            } else {
+                ## Skip spectra with only few peak in it. These will fail in the
+                ## smoothing and centroiding.
+                nspec <- length(tmp)
+                tmp <- tmp[peaksCount(tmp) > 1000]
+                nspec_2 <- length(tmp)
+                if (nspec_2 < nspec) {
+                    message("WARN: removed ", nspec - nspec_2, " spectra in file ",
+                            basename(z), "!")
+                }
+                tmp <- combineSpectraMovingWindow(tmp, timeDomain = TRUE)
+                suppressWarnings(
+                    tmp <- pickPeaks(
+                        smooth(tmp, method = "SavitzkyGolay",
+                               halfWindowSize = 6L),
+                        refineMz = "descendPeak", signalPercentage = 33)
+                )
+            }
+            writeMSData(tmp, file = outf, copy = TRUE)
+        } else {
+            message("File ", basename(z), " does not contain any MS1 spectra.")
+        }
+    })
     if (is(res, "try-error")) {
         message("ERROR: unable to process file ", basename(z), "!\n The Error ",
                 "was: ", as.character(res))
